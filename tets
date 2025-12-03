@@ -1,0 +1,85 @@
+admin@MacBook-Air-admin-2 proof11 % ./test_pro
+gram
+[==========] Running 2 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 1 test from CapitalizeAfterDotTest
+[ RUN      ] CapitalizeAfterDotTest.BasicCases
+[       OK ] CapitalizeAfterDotTest.BasicCases (0 ms)
+[----------] 1 test from CapitalizeAfterDotTest (0 ms total)
+
+[----------] 1 test from FileIOTest
+[ RUN      ] FileIOTest.WriteAndRead
+[       OK ] FileIOTest.WriteAndRead (1 ms)
+[----------] 1 test from FileIOTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 2 tests from 2 test suites ran. (1 ms total)
+[  PASSED  ] 2 tests.
+admin@MacBook-Air-admin-2 proof11 % cat test_m
+ain.cpp
+#define main main_ignored_for_tests
+#include "lab11_2.cpp"
+#undef main
+
+#include <fstream>
+#include <gtest/gtest.h>
+#include <string>
+
+TEST(CapitalizeAfterDotTest, BasicCases) {
+  std::string text1 = "this is a test. another sentence.";
+  CapitalizeAfterDot(text1);
+  EXPECT_EQ(text1, "This is a test. Another sentence.");
+
+  std::string text2 = "no dot here";
+  CapitalizeAfterDot(text2);
+  EXPECT_EQ(text2, "No dot here");
+
+  std::string text3 = "multiple. dots. here.";
+  CapitalizeAfterDot(text3);
+  EXPECT_EQ(text3, "Multiple. Dots. Here.");
+}
+
+TEST(FileIOTest, WriteAndRead) {
+  std::ofstream tempFile("t1.txt");
+  ASSERT_TRUE(tempFile.is_open());
+  tempFile << "hello. world.";
+  tempFile.close();
+
+  std::ifstream inFile("t1.txt");
+  ASSERT_TRUE(inFile.is_open());
+  std::string line;
+  std::getline(inFile, line);
+  inFile.close();
+
+  CapitalizeAfterDot(line);
+
+  std::ofstream outFile("t2.txt");
+  ASSERT_TRUE(outFile.is_open());
+  outFile << line;
+  outFile.close();
+
+  std::ifstream checkFile("t2.txt");
+  ASSERT_TRUE(checkFile.is_open());
+  std::string checkLine;
+  std::getline(checkFile, checkLine);
+  checkFile.close();
+
+  EXPECT_EQ(checkLine, "Hello. World.");
+}
+
+int main(int argc, char **argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
+admin@MacBook-Air-admin-2 proof11 % 
+
+
+
+
+
+
+
+
+
+
+
